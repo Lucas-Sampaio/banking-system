@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  account  Account?  @relation(fields: [accountId], references: [id])
+  accountId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+   @@index([email])
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  number     BigInt   @unique
+  balance     Float    @default(0)
+  user      User?     
+  sourceTransactions Transaction[] @relation("sourceTransactions")
+  destinationTransactions Transaction[] @relation("destinationTransactions")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TransactionType {
+  Credit
+  Debit
+}
+
+model Transaction {
+  id                  String          @id @default(cuid())
+  
+  // Relacionamento com a conta de origem
+  sourceAccountId     String
+  sourceAccount       Account         @relation("sourceTransactions", fields: [sourceAccountId], references: [id])
+  
+  // Relacionamento com a conta de destino
+  destinationAccountId String
+  destinationAccount   Account        @relation("destinationTransactions", fields: [destinationAccountId], references: [id])
+  
+  value               Float
+  transactionType     TransactionType
+  
+  // Relacionamento de reversão (auto-relacionamento)
+  reversalTargetId    String?        @unique
+  reversalTarget      Transaction?   @relation("transactionReversals", fields: [reversalTargetId], references: [id])
+  reversedBy          Transaction[]  @relation("transactionReversals")
+  
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@index([sourceAccountId])
+  @@index([destinationAccountId])
+  @@index([createdAt])
+}
