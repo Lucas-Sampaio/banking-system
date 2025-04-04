@@ -1,11 +1,27 @@
 export class Account {
   constructor(
-    public id: string,
-    public number: bigint,
-    public userId: string,
+    private id: string,
+    private number: bigint,
+    private userId: string,
   ) {
     this.balance = 0;
   }
 
-  public balance: number;
+  private balance: number;
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public getNumber(): bigint {
+    return this.number;
+  }
+
+  public getUserId(): string {
+    return this.userId;
+  }
+
+  public getBalance(): number {
+    return this.balance;
+  }
 }

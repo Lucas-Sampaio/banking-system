@@ -21,7 +21,7 @@ export class User {
   getPassword(): string {
     return this.password;
   }
-  getAccount(): Account {
-    return this.account;
+  getAccountNumber(): bigint {
+    return this.account.getNumber();
   }
 }

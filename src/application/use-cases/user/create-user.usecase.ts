@@ -48,7 +48,7 @@ export class CreateUserUseCase {
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
-      accountNumber: user.getAccount().number,
+      accountNumber: user.getAccountNumber(),
     };
   }
 }

@@ -52,7 +52,7 @@ export class PrismaUserRepository implements IUsersRepository {
         password: user.getPassword(),
         account: {
           create: {
-            number: user.getAccount().number,
+            number: user.getAccountNumber(),
           },
         },
       },
