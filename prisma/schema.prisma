@@ -45,8 +45,8 @@ model Transaction {
   sourceAccount       Account         @relation("sourceTransactions", fields: [sourceAccountId], references: [id])
   
   // Relacionamento com a conta de destino
-  destinationAccountId String
-  destinationAccount   Account        @relation("destinationTransactions", fields: [destinationAccountId], references: [id])
+  destinationAccountId String?
+  destinationAccount   Account?        @relation("destinationTransactions", fields: [destinationAccountId], references: [id])
   
   amount               Float
   

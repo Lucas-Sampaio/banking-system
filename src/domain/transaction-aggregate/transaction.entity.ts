@@ -2,7 +2,7 @@ export class Transaction {
   constructor(
     private id: string,
     private sourceAccountId: string,
-    private destinationAccountId: string,
+    private destinationAccountId: string | null,
     private amount: number,
     private reversalTargetId: string | null,
   ) {}
@@ -23,7 +23,7 @@ export class Transaction {
     return this.sourceAccountId;
   }
 
-  public getDestinationAccountId(): string {
+  public getDestinationAccountId(): string | null {
     return this.destinationAccountId;
   }
 

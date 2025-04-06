@@ -1,25 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import {
-  MakeTransferInputDto,
-  MakeTransferOutputDto,
-} from './dto/make-bank-transfer.dto';
 import { AccountService } from 'src/infra/services/account.service';
+import { AddCreditInputDto, AddCreditOutputDto } from './dto/add-credit.dto';
 
 @Injectable()
-export class MakeTransferUserUseCase {
+export class AddCreditUserUseCase {
   constructor(private accountService: AccountService) {}
 
-  async execute(input: MakeTransferInputDto): Promise<MakeTransferOutputDto> {
-    const result = await this.accountService.MakeTransfer(
+  async execute(input: AddCreditInputDto): Promise<AddCreditOutputDto> {
+    const result = await this.accountService.AddCredit(
       input.sourceAccountNumber,
-      input.destinationAccountNumber,
       input.amount,
-      null,
     );
     return {
       transactionId: result.getId(),
       sourceAccountNumber: input.sourceAccountNumber,
-      destinationAccountNumber: input.destinationAccountNumber,
       amount: result.getAmount(),
       createdAt: result.getCreatedAt(),
     };

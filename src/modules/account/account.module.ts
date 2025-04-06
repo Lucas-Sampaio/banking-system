@@ -4,19 +4,23 @@ import { AccountController } from 'src/presentation/controllers/account.controll
 import { MakeTransferUserUseCase } from 'src/application/use-cases/account/make-bank-transfer.usecase';
 import { PrismaAccountRepository } from 'src/infra/repositories/prisma/account.repository';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { TransferService } from 'src/infra/services/transfer.service';
+import { AccountService } from 'src/infra/services/account.service';
+import { AddCreditUserUseCase } from 'src/application/use-cases/account/add-credit.usecase';
+import { RefundTransferUserUseCase } from 'src/application/use-cases/account/refund-transfer.usercase';
 
 @Module({
   imports: [AuthModule],
   controllers: [AccountController],
   providers: [
     MakeTransferUserUseCase,
+    AddCreditUserUseCase,
+    RefundTransferUserUseCase,
     {
       provide: 'IAccountRepository',
       useClass: PrismaAccountRepository,
     },
     PrismaService,
-    TransferService,
+    AccountService,
   ],
 })
 export class AccountModule {}

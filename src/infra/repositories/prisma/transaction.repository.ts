@@ -5,6 +5,13 @@ import { TransactionMapper } from 'src/infra/database/mappers/transaction.mapper
 
 export class PrismaTransactionRepository implements ITransactionRepository {
   constructor(private prisma: Prisma.TransactionClient) {}
+  async hasbeenReversed(id: string): Promise<boolean> {
+    const count = await this.prisma.transaction.count({
+      where: { reversalTargetId: id },
+    });
+    console.log('count', count);
+    return count > 0;
+  }
 
   async create(transaction: Transaction): Promise<Transaction> {
     const transactionOutput = await this.prisma.transaction.create({
@@ -13,6 +20,7 @@ export class PrismaTransactionRepository implements ITransactionRepository {
         destinationAccountId: transaction.getDestinationAccountId(),
         amount: transaction.getAmount(),
         id: transaction.getId(),
+        reversalTargetId: transaction.getReversalTargetId(),
       },
     });
 
