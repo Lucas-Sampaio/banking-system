@@ -46,7 +46,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     // Tratamento genérico para erros não identificados
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: 'Internal server error',
+      message: 'Internal server error ',
     });
   }
 

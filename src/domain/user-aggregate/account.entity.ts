@@ -24,4 +24,16 @@ export class Account {
   public getBalance(): number {
     return this.balance;
   }
+  public setBalance(balance: number): void {
+    this.balance = balance;
+  }
+  public makeDebit(value: number): void {
+    if (value > this.balance) {
+      throw new Error('Insufficient balance');
+    }
+    this.balance -= value;
+  }
+  public makeCredit(value: number): void {
+    this.balance += value;
+  }
 }

@@ -2,7 +2,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
-import { CreateUserInputDto, CreateUserOutputDto } from './dto/create-user.dto';
+import { CreateUserInputDto } from './dto/create-user.dto';
 import { IUsersRepository } from 'src/domain/user-aggregate/user.repository.interface';
 import { User } from 'src/domain/user-aggregate/user.entity';
 import { Account } from 'src/domain/user-aggregate/account.entity';
@@ -10,6 +10,7 @@ import {
   AccountAlreadyExistsError,
   EmailAlreadyExistsError,
 } from 'src/domain/exceptions/user.errors';
+import { UserOutputDto } from './dto/user.dto';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -18,19 +19,22 @@ export class CreateUserUseCase {
     private readonly userRepository: IUsersRepository,
   ) {}
 
-  async execute(input: CreateUserInputDto): Promise<CreateUserOutputDto> {
+  async execute(input: CreateUserInputDto): Promise<UserOutputDto> {
     const existingUser = await this.userRepository.findByEmail(input.email);
     if (existingUser) {
       throw new EmailAlreadyExistsError(input.email);
     }
 
-    const existingAccount = await this.userRepository.existsAccountNumber(
-      input.accountNumber,
-    );
+    if (input.accountNumber) {
+      const existingAccount = await this.userRepository.existsAccountNumber(
+        input.accountNumber,
+      );
 
-    if (existingAccount) {
-      throw new AccountAlreadyExistsError(input.accountNumber);
+      if (existingAccount) {
+        throw new AccountAlreadyExistsError(input.accountNumber);
+      }
     }
+
     const hashedPassword = await bcrypt.hash(input.password, 8);
     const userId = crypto.randomUUID();
     const accountId = crypto.randomUUID();
@@ -39,7 +43,9 @@ export class CreateUserUseCase {
       input.name,
       input.email,
       hashedPassword,
-      new Account(accountId, input.accountNumber, userId),
+      input.accountNumber === null
+        ? null
+        : new Account(accountId, input.accountNumber, userId),
     );
 
     await this.userRepository.create(user);
@@ -48,7 +54,7 @@ export class CreateUserUseCase {
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
-      accountNumber: user.getAccountNumber(),
+      accountNumber: user.getAccountNumber()?.toString(),
     };
   }
 }

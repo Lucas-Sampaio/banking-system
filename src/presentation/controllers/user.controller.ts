@@ -1,18 +1,23 @@
 // src/presentation/controllers/auth.controller.ts
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.usecase';
-import { CreateUserInputDto } from 'src/application/use-cases/user/dto/create-user.dto';
-
+import { UserOutputDto } from 'src/application/use-cases/user/dto/user.dto';
+import { FindAllUserUseCase } from 'src/application/use-cases/user/findall-user.usecase';
 @Controller('user')
 export class UserController {
-  constructor(private readonly createUserUseCase: CreateUserUseCase) {}
+  constructor(private readonly findallUser: FindAllUserUseCase) {}
 
-  @ApiOperation({ summary: 'Registrar novo usuário' })
-  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso' })
-  @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  @Post()
-  async register(@Body() createUserDto: CreateUserInputDto) {
-    return this.createUserUseCase.execute(createUserDto);
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Retorna todos os usuarios' })
+  @ApiResponse({
+    status: 200,
+    description: 'Retorna todos os usuarios',
+    type: UserOutputDto,
+    isArray: true,
+  })
+  @Get()
+  async getAll() {
+    return this.findallUser.execute();
   }
 }

@@ -18,8 +18,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  account  Account?  @relation(fields: [accountId], references: [id])
-  accountId String @unique
+  account  Account? 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
    @@index([email])
@@ -29,16 +28,13 @@ model Account {
   id        String   @id @default(cuid())
   number     BigInt   @unique
   balance     Float    @default(0)
-  user      User?     
+  user      User?     @relation(fields: [userId], references: [id])
+  userId     String? @unique
   sourceTransactions Transaction[] @relation("sourceTransactions")
   destinationTransactions Transaction[] @relation("destinationTransactions")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum TransactionType {
-  Credit
-  Debit
+  @@index([number])
 }
 
 model Transaction {
@@ -52,8 +48,7 @@ model Transaction {
   destinationAccountId String
   destinationAccount   Account        @relation("destinationTransactions", fields: [destinationAccountId], references: [id])
   
-  value               Float
-  transactionType     TransactionType
+  amount               Float
   
   // Relacionamento de reversão (auto-relacionamento)
   reversalTargetId    String?        @unique
@@ -61,7 +56,6 @@ model Transaction {
   reversedBy          Transaction[]  @relation("transactionReversals")
   
   createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
 
   @@index([sourceAccountId])
   @@index([destinationAccountId])

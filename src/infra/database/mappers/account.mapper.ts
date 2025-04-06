@@ -1,0 +1,23 @@
+import { Account as PrismaAccount } from '@prisma/client';
+import { Account } from 'src/domain/user-aggregate/account.entity';
+
+export class AccountMapper {
+  static toDomain(raw: PrismaAccount): Account {
+    const account = new Account(raw.id, raw.number, raw.userId ?? '');
+    account.setBalance(raw.balance);
+    return account;
+  }
+  static toDomainList(rawList: PrismaAccount[]): Account[] {
+    return rawList.map((raw) => this.toDomain(raw));
+  }
+  static toPersistence(
+    account: Account,
+  ): Omit<PrismaAccount, 'createdAt' | 'updatedAt'> {
+    return {
+      id: account.getId(),
+      number: account.getNumber(),
+      balance: account.getBalance(),
+      userId: account.getUserId(),
+    };
+  }
+}

@@ -6,7 +6,7 @@ export class User {
     private name: string,
     private email: string,
     private password: string,
-    private account: Account,
+    private account: Account | null,
   ) {}
 
   getId(): string {
@@ -21,7 +21,10 @@ export class User {
   getPassword(): string {
     return this.password;
   }
-  getAccountNumber(): bigint {
-    return this.account.getNumber();
+  getAccountNumber(): bigint | undefined {
+    return this.account?.getNumber();
+  }
+  getAccount(): Account | null {
+    return this.account;
   }
 }

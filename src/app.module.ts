@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './presentation/filters/banking-exception.filter';
+import { AuthModule } from './modules/auth/auth.module';
+import { AccountModule } from './modules/account/account.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UserModule],
-  controllers: [AppController],
+  imports: [
+    UserModule,
+    AuthModule,
+    AccountModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   providers: [
-    AppService,
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
