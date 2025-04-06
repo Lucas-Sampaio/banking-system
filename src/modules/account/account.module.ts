@@ -22,5 +22,6 @@ import { RefundTransferUserUseCase } from 'src/application/use-cases/account/ref
     PrismaService,
     AccountService,
   ],
+  exports: ['IAccountRepository'],
 })
 export class AccountModule {}

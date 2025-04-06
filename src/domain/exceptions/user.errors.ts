@@ -12,3 +12,15 @@ export class EmailAlreadyExistsError extends BankingSystemError {
     super(`Email ${email} already exists`, ErrorCode.ALREADY_EXISTS);
   }
 }
+
+export class UserNotFound extends BankingSystemError {
+  constructor(id: string) {
+    super(`User ${id} not found`, ErrorCode.NOT_FOUND);
+  }
+}
+
+export class UserAlreadyExistingAccountError extends BankingSystemError {
+  constructor() {
+    super(`User already has an existing account.`, ErrorCode.ALREADY_EXISTS);
+  }
+}

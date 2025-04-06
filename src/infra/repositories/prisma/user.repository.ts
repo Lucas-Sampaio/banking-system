@@ -9,6 +9,35 @@ import { PrismaService } from 'src/infra/database/prisma.service';
 @Injectable()
 export class PrismaUserRepository implements IUsersRepository {
   constructor(private prisma: PrismaService) {}
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        account: true,
+      },
+    });
+    if (!user) {
+      return null;
+    }
+    return UserMapper.toDomain(user);
+  }
+  async addAccount(userId: string, account: Account): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        account: {
+          create: {
+            id: account.getId(),
+            number: account.getNumber(),
+            balance: account.getBalance(),
+          },
+        },
+      },
+    });
+    return;
+  }
   async findAll(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       include: {
