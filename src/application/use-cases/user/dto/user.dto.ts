@@ -8,5 +8,5 @@ export class UserOutputDto {
   @ApiProperty()
   email: string;
   @ApiProperty()
-  accountNumber: string | undefined;
+  accountNumber: number | undefined;
 }

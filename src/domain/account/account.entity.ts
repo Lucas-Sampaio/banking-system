@@ -1,7 +1,9 @@
+import { InsufficientFunds } from '../exceptions/account.errors';
+
 export class Account {
   constructor(
     private id: string,
-    private number: bigint,
+    private number: number,
     private userId: string,
   ) {
     this.balance = 0;
@@ -13,7 +15,7 @@ export class Account {
     return this.id;
   }
 
-  public getNumber(): bigint {
+  public getNumber(): number {
     return this.number;
   }
 
@@ -29,7 +31,7 @@ export class Account {
   }
   public makeDebit(value: number): void {
     if (value > this.balance) {
-      throw new Error('Insufficient balance');
+      throw new InsufficientFunds();
     }
     this.balance -= value;
   }

@@ -1,4 +1,3 @@
-// src/presentation/filters/global-exception.filter.ts
 import {
   ExceptionFilter,
   Catch,
@@ -54,7 +53,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     switch (exception.code) {
       case ErrorCode.NOT_FOUND:
         return HttpStatus.NOT_FOUND;
-      case 'INSUFFICIENT_FUNDS':
+      case ErrorCode.DomainError:
         return HttpStatus.BAD_REQUEST;
       case ErrorCode.ALREADY_EXISTS:
         return HttpStatus.CONFLICT;

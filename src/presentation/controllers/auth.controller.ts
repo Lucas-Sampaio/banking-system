@@ -22,7 +22,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @Post('register')
   async register(@Body() createUserDto: CreateUserInputDto) {
-    return this.createUserUseCase.execute(createUserDto);
+    return await this.createUserUseCase.execute(createUserDto);
   }
 
   @ApiOperation({ summary: 'Realiza login no sistema' })
@@ -39,6 +39,6 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Post('login')
   async login(@Body() body: LoginUserInputDto) {
-    return this.loginUsercase.execute(body);
+    return await this.loginUsercase.execute(body);
   }
 }

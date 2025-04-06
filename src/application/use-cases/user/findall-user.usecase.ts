@@ -15,7 +15,7 @@ export class FindAllUserUseCase {
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
-      accountNumber: user.getAccountNumber()?.toString(),
+      accountNumber: user.getAccountNumber(),
     }));
   }
 }

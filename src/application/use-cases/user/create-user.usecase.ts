@@ -5,18 +5,21 @@ import * as bcrypt from 'bcryptjs';
 import { CreateUserInputDto } from './dto/create-user.dto';
 import { IUsersRepository } from 'src/domain/user-aggregate/user.repository.interface';
 import { User } from 'src/domain/user-aggregate/user.entity';
-import { Account } from 'src/domain/user-aggregate/account.entity';
+import { Account } from 'src/domain/account/account.entity';
 import {
   AccountAlreadyExistsError,
   EmailAlreadyExistsError,
 } from 'src/domain/exceptions/user.errors';
 import { UserOutputDto } from './dto/user.dto';
+import { IAccountRepository } from 'src/domain/account/account.repository.interface';
 
 @Injectable()
 export class CreateUserUseCase {
   constructor(
     @Inject('IUsersRepository')
     private readonly userRepository: IUsersRepository,
+    @Inject('IAccountRepository')
+    private readonly accountRepository: IAccountRepository,
   ) {}
 
   async execute(input: CreateUserInputDto): Promise<UserOutputDto> {
@@ -26,7 +29,7 @@ export class CreateUserUseCase {
     }
 
     if (input.accountNumber) {
-      const existingAccount = await this.userRepository.existsAccountNumber(
+      const existingAccount = await this.accountRepository.existsAccountNumber(
         input.accountNumber,
       );
 
@@ -54,7 +57,7 @@ export class CreateUserUseCase {
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
-      accountNumber: user.getAccountNumber()?.toString(),
+      accountNumber: user.getAccountNumber(),
     };
   }
 }

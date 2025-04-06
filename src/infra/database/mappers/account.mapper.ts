@@ -1,5 +1,5 @@
 import { Account as PrismaAccount } from '@prisma/client';
-import { Account } from 'src/domain/user-aggregate/account.entity';
+import { Account } from 'src/domain/account/account.entity';
 
 export class AccountMapper {
   static toDomain(raw: PrismaAccount): Account {

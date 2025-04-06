@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Account } from 'src/domain/user-aggregate/account.entity';
+import { Account } from 'src/domain/account/account.entity';
 import { User } from 'src/domain/user-aggregate/user.entity';
 import { IUsersRepository } from 'src/domain/user-aggregate/user.repository.interface';
 import { AccountMapper } from 'src/infra/database/mappers/account.mapper';
@@ -26,7 +26,7 @@ export class PrismaUserRepository implements IUsersRepository {
     });
   }
 
-  async getAccountsByNumbers(numbers: bigint[]): Promise<Account[]> {
+  async getAccountsByNumbers(numbers: number[]): Promise<Account[]> {
     const accounts = await this.prisma.account.findMany({
       where: {
         number: {
@@ -38,7 +38,7 @@ export class PrismaUserRepository implements IUsersRepository {
     return AccountMapper.toDomainList(accounts);
   }
 
-  async existsAccountNumber(numberAccount: bigint): Promise<boolean> {
+  async existsAccountNumber(numberAccount: number): Promise<boolean> {
     const count = await this.prisma.account.count({
       where: { number: numberAccount },
     });

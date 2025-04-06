@@ -18,6 +18,6 @@ export class UserController {
   })
   @Get()
   async getAll() {
-    return this.findallUser.execute();
+    return await this.findallUser.execute();
   }
 }

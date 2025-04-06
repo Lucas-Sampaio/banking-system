@@ -2,7 +2,7 @@ import { BankingSystemError } from './banking-exceptions';
 import { ErrorCode } from './errors-code';
 
 export class AccountAlreadyExistsError extends BankingSystemError {
-  constructor(accountNumber: bigint) {
+  constructor(accountNumber: number) {
     super(`Account ${accountNumber} already exists`, ErrorCode.ALREADY_EXISTS);
   }
 }

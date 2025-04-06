@@ -6,6 +6,7 @@ import { LoginUserUseCase } from 'src/application/use-cases/user/login-user.usec
 import { AuthService } from 'src/infra/auth/auth.service';
 import { JwtStrategy } from 'src/infra/auth/jwt.strategy';
 import { PrismaService } from 'src/infra/database/prisma.service';
+import { PrismaAccountRepository } from 'src/infra/repositories/prisma/account.repository';
 import { PrismaUserRepository } from 'src/infra/repositories/prisma/user.repository';
 import { AuthController } from 'src/presentation/controllers/auth.controller';
 
@@ -28,6 +29,10 @@ import { AuthController } from 'src/presentation/controllers/auth.controller';
     PrismaService,
     AuthService,
     JwtStrategy,
+    {
+      provide: 'IAccountRepository',
+      useClass: PrismaAccountRepository,
+    },
   ],
   exports: [PassportModule, JwtModule],
 })

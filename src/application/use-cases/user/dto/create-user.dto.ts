@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -28,5 +29,6 @@ export class CreateUserInputDto {
   @IsOptional()
   @ApiProperty({ example: '1247' })
   @Min(1)
-  accountNumber: bigint | null;
+  @IsInt()
+  accountNumber: number | null;
 }

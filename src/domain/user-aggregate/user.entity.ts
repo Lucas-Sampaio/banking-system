@@ -1,4 +1,4 @@
-import { Account } from './account.entity';
+import { Account } from '../account/account.entity';
 
 export class User {
   constructor(
@@ -21,7 +21,7 @@ export class User {
   getPassword(): string {
     return this.password;
   }
-  getAccountNumber(): bigint | undefined {
+  getAccountNumber(): number | undefined {
     return this.account?.getNumber();
   }
   getAccount(): Account | null {

@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Transaction } from 'src/domain/transaction-aggregate/transaction.entity';
 import { ITransactionRepository } from 'src/domain/transaction-aggregate/transaction.repository.interface';
 import { TransactionMapper } from 'src/infra/database/mappers/transaction.mapper';
-import { PrismaService } from 'src/infra/database/prisma.service';
 
-@Injectable()
 export class PrismaTransactionRepository implements ITransactionRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: Prisma.TransactionClient) {}
 
   async create(transaction: Transaction): Promise<Transaction> {
     const transactionOutput = await this.prisma.transaction.create({
