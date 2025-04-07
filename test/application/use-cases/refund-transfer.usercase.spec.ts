@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AccountService } from 'src/infra/services/account.service';
 import { TransactionNotFound } from 'src/domain/exceptions/transaction.errors';
 import { RefundTransferUserUseCase } from 'src/application/use-cases/account/refund-transfer.usercase';
 import { Transaction } from 'src/domain/transaction-aggregate/transaction.entity';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 
 describe('RefundTransferUserUseCase', () => {
   let refundTransferUserUseCase: RefundTransferUserUseCase;
-  let accountService: jest.Mocked<AccountService>;
+  let accountService: jest.Mocked<IAccountService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         RefundTransferUserUseCase,
         {
-          provide: AccountService,
+          provide: 'IAccountService',
           useValue: {
             refundTransfer: jest.fn(),
           },
@@ -24,7 +24,7 @@ describe('RefundTransferUserUseCase', () => {
     refundTransferUserUseCase = module.get<RefundTransferUserUseCase>(
       RefundTransferUserUseCase,
     );
-    accountService = module.get(AccountService);
+    accountService = module.get('IAccountService');
   });
 
   it('should refund a transfer successfully and return transaction details', async () => {

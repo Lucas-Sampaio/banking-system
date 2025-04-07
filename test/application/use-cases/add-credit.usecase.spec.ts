@@ -4,19 +4,19 @@ import {
   AddCreditInputDto,
   AddCreditOutputDto,
 } from 'src/application/use-cases/account/dto/add-credit.dto';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 import { Transaction } from 'src/domain/transaction-aggregate/transaction.entity';
-import { AccountService } from 'src/infra/services/account.service';
 
 describe('AddCreditUserUseCase', () => {
   let addCreditUserUseCase: AddCreditUserUseCase;
-  let accountService: jest.Mocked<AccountService>;
+  let accountService: jest.Mocked<IAccountService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AddCreditUserUseCase,
         {
-          provide: AccountService,
+          provide: 'IAccountService',
           useValue: {
             AddCredit: jest.fn(),
           },
@@ -26,29 +26,32 @@ describe('AddCreditUserUseCase', () => {
 
     addCreditUserUseCase =
       module.get<AddCreditUserUseCase>(AddCreditUserUseCase);
-    accountService = module.get(AccountService);
+    accountService = module.get('IAccountService');
   });
 
   it('should add credit successfully and return transaction details', async () => {
+    const amount = 100;
+    const date = new Date();
     const input: AddCreditInputDto = {
       sourceAccountNumber: 1234567890,
-      amount: 100,
+      amount: amount,
     };
 
-    const mockTransaction = new Transaction(
-      'transaction-id',
-      'source-account-id',
-      null,
-      100,
-      null,
-    );
-
+    const mockTransaction: Transaction = {
+      id: 'transaction-id',
+      sourceAccountId: 'source-account-id',
+      destinationAccountId: null,
+      amount: amount,
+      reversalTargetId: null,
+      getId: jest.fn().mockReturnValue('transaction-id'),
+      getAmount: jest.fn().mockReturnValue(amount),
+      getCreatedAt: jest.fn().mockReturnValue(date),
+    } as unknown as Transaction;
     accountService.AddCredit.mockResolvedValue(mockTransaction);
 
     const result: AddCreditOutputDto =
       await addCreditUserUseCase.execute(input);
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(accountService.AddCredit).toHaveBeenCalledWith(
       input.sourceAccountNumber,
       input.amount,
@@ -57,8 +60,8 @@ describe('AddCreditUserUseCase', () => {
     expect(result).toEqual({
       transactionId: 'transaction-id',
       sourceAccountNumber: input.sourceAccountNumber,
-      amount: 100,
-      createdAt: new Date('2025-04-06T12:00:00Z'),
+      amount: amount,
+      createdAt: date,
     });
   });
 
@@ -74,7 +77,6 @@ describe('AddCreditUserUseCase', () => {
       'Account not found',
     );
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(accountService.AddCredit).toHaveBeenCalledWith(
       input.sourceAccountNumber,
       input.amount,

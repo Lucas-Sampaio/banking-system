@@ -11,9 +11,10 @@ import {
   RefundNotCompleted,
   TransactionAlreadyReversedError,
 } from 'src/domain/exceptions/transaction.errors';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 
 @Injectable()
-export class AccountService {
+export class AccountService implements IAccountService {
   constructor(private readonly prisma: PrismaService) {}
 
   async MakeTransfer(

@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   MakeTransferInputDto,
   MakeTransferOutputDto,
 } from './dto/make-bank-transfer.dto';
-import { AccountService } from 'src/infra/services/account.service';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 
 @Injectable()
 export class MakeTransferUserUseCase {
-  constructor(private accountService: AccountService) {}
+  constructor(
+    @Inject('IAccountService')
+    private accountService: IAccountService,
+  ) {}
 
   async execute(input: MakeTransferInputDto): Promise<MakeTransferOutputDto> {
     const result = await this.accountService.MakeTransfer(

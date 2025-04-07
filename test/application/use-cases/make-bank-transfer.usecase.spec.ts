@@ -4,19 +4,19 @@ import {
   MakeTransferOutputDto,
 } from 'src/application/use-cases/account/dto/make-bank-transfer.dto';
 import { MakeTransferUserUseCase } from 'src/application/use-cases/account/make-bank-transfer.usecase';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 import { Transaction } from 'src/domain/transaction-aggregate/transaction.entity';
-import { AccountService } from 'src/infra/services/account.service';
 
 describe('MakeTransferUserUseCase', () => {
   let makeTransferUserUseCase: MakeTransferUserUseCase;
-  let accountService: jest.Mocked<AccountService>;
+  let accountService: jest.Mocked<IAccountService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         MakeTransferUserUseCase,
         {
-          provide: AccountService,
+          provide: 'IAccountService',
           useValue: {
             MakeTransfer: jest.fn(),
           },
@@ -27,7 +27,7 @@ describe('MakeTransferUserUseCase', () => {
     makeTransferUserUseCase = module.get<MakeTransferUserUseCase>(
       MakeTransferUserUseCase,
     );
-    accountService = module.get(AccountService);
+    accountService = module.get('IAccountService');
   });
 
   it('should make a bank transfer successfully and return transaction details', async () => {
@@ -37,7 +37,7 @@ describe('MakeTransferUserUseCase', () => {
       amount: 200,
     };
 
-    const data = new Date();
+    const date = new Date();
     const amount = 100;
     const mockTransaction: Transaction = {
       id: 'tx-id',
@@ -47,7 +47,7 @@ describe('MakeTransferUserUseCase', () => {
       reversalTargetId: null,
       getId: jest.fn().mockReturnValue('tx-id'),
       getAmount: jest.fn().mockReturnValue(amount),
-      getCreatedAt: jest.fn().mockReturnValue(data),
+      getCreatedAt: jest.fn().mockReturnValue(date),
     } as unknown as Transaction;
 
     accountService.MakeTransfer.mockResolvedValue(mockTransaction);
@@ -66,7 +66,7 @@ describe('MakeTransferUserUseCase', () => {
       sourceAccountNumber: input.sourceAccountNumber,
       destinationAccountNumber: input.destinationAccountNumber,
       amount: amount,
-      createdAt: data,
+      createdAt: date,
     });
   });
 

@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { AccountService } from 'src/infra/services/account.service';
+import { Inject, Injectable } from '@nestjs/common';
 import { TransactionNotFound } from 'src/domain/exceptions/transaction.errors';
+import { IAccountService } from 'src/domain/services/account.service.interface';
 
 @Injectable()
 export class RefundTransferUserUseCase {
-  constructor(private accountService: AccountService) {}
+  constructor(
+    @Inject('IAccountService')
+    private accountService: IAccountService,
+  ) {}
 
   async execute(
     id: string,
