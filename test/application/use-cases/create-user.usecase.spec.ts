@@ -1,104 +1,109 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import * as bcrypt from 'bcryptjs';
-// import { IUsersRepository } from 'src/domain/user-aggregate/user.repository.interface';
-// import { User } from 'src/domain/user-aggregate/user.entity';
-// import {
-//   AccountAlreadyExistsError,
-//   EmailAlreadyExistsError,
-// } from 'src/domain/exceptions/user.errors';
-// import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.usecase';
+import { Test, TestingModule } from '@nestjs/testing';
+import * as bcrypt from 'bcryptjs';
+import { IUsersRepository } from 'src/domain/user-aggregate/user.repository.interface';
+import { IAccountRepository } from 'src/domain/account/account.repository.interface';
+import {
+  AccountAlreadyExistsError,
+  EmailAlreadyExistsError,
+} from 'src/domain/exceptions/user.errors';
+import { User } from 'src/domain/user-aggregate/user.entity';
+import { CreateUserUseCase } from 'src/application/use-cases/user/create-user.usecase';
 
-// describe('CreateUserUseCase', () => {
-//   let createUserUseCase: CreateUserUseCase;
-//   let userRepository: jest.Mocked<IUsersRepository>;
+describe('CreateUserUseCase', () => {
+  let createUserUseCase: CreateUserUseCase;
+  let userRepository: jest.Mocked<IUsersRepository>;
+  let accountRepository: jest.Mocked<IAccountRepository>;
 
-//   beforeEach(async () => {
-//     userRepository = {
-//       create: jest.fn(),
-//       findByEmail: jest.fn(),
-//       findById: jest.fn(),
-//       existsAccountNumber: jest.fn().mockResolvedValue(false),
-//     };
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        CreateUserUseCase,
+        {
+          provide: 'IUsersRepository',
+          useValue: {
+            findByEmail: jest.fn(),
+            create: jest.fn(),
+          },
+        },
+        {
+          provide: 'IAccountRepository',
+          useValue: {
+            existsAccountNumber: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
 
-//     const module: TestingModule = await Test.createTestingModule({
-//       providers: [
-//         CreateUserUseCase,
-//         {
-//           provide: 'IUsersRepository',
-//           useValue: userRepository,
-//         },
-//       ],
-//     }).compile();
+    createUserUseCase = module.get<CreateUserUseCase>(CreateUserUseCase);
+    userRepository = module.get('IUsersRepository');
+    accountRepository = module.get('IAccountRepository');
+  });
 
-//     createUserUseCase = module.get<CreateUserUseCase>(CreateUserUseCase);
-//   });
+  it('should create a user successfully', async () => {
+    const input = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      accountNumber: 1234567,
+    };
 
-//   it('should create a user successfully', async () => {
-//     const input = {
-//       name: 'John Doe',
-//       email: 'john.doe@example.com',
-//       password: 'password123',
-//       accountNumber: BigInt(1234567890),
-//     };
+    userRepository.findByEmail.mockResolvedValue(null);
+    accountRepository.existsAccountNumber.mockResolvedValue(false);
+    jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword' as never);
 
-//     userRepository.findByEmail.mockImplementation(() => Promise.resolve(null));
+    const result = await createUserUseCase.execute(input);
 
-//     userRepository.existsAccountNumber.mockResolvedValue(false);
-//     jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword' as never);
+    expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    expect(accountRepository.existsAccountNumber).toHaveBeenCalledWith(
+      input.accountNumber,
+    );
+    expect(userRepository.create).toHaveBeenCalledWith(expect.any(User));
+    expect(result).toEqual({
+      id: expect.any(String) as unknown as string,
+      name: input.name,
+      email: input.email,
+      accountNumber: input.accountNumber,
+    });
+  });
 
-//     const result = await createUserUseCase.execute(input);
+  it('should throw EmailAlreadyExistsError if email already exists', async () => {
+    const input = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      accountNumber: 12345678,
+    };
 
-//     expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
-//     expect(userRepository.existsAccountNumber).toHaveBeenCalledWith(
-//       input.accountNumber,
-//     );
-//     expect(userRepository.create).toHaveBeenCalled();
-//     expect(result).toEqual({
-//       id: expect.any(String) as unknown as string,
-//       name: input.name,
-//       email: input.email,
-//       accountNumber: input.accountNumber,
-//     });
-//   });
+    userRepository.findByEmail.mockResolvedValue({} as User);
 
-//   it('should throw EmailAlreadyExistsError if email already exists', async () => {
-//     const input = {
-//       name: 'John Doe',
-//       email: 'john.doe@example.com',
-//       password: 'password123',
-//       accountNumber: BigInt(1234567890),
-//     };
+    await expect(createUserUseCase.execute(input)).rejects.toThrow(
+      EmailAlreadyExistsError,
+    );
 
-//     userRepository.findByEmail.mockResolvedValue({} as User);
+    expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    expect(accountRepository.existsAccountNumber).not.toHaveBeenCalled();
+    expect(userRepository.create).not.toHaveBeenCalled();
+  });
 
-//     await expect(createUserUseCase.execute(input)).rejects.toThrow(
-//       EmailAlreadyExistsError,
-//     );
+  it('should throw AccountAlreadyExistsError if account number already exists', async () => {
+    const input = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      accountNumber: 12345678,
+    };
 
-//     expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
-//     expect(userRepository.existsAccountNumber).not.toHaveBeenCalled();
-//     expect(userRepository.create).not.toHaveBeenCalled();
-//   });
+    userRepository.findByEmail.mockResolvedValue(null);
+    accountRepository.existsAccountNumber.mockResolvedValue(true);
 
-//   it('should throw AccountAlreadyExistsError if account number already exists', async () => {
-//     const input = {
-//       name: 'John Doe',
-//       email: 'john.doe@example.com',
-//       password: 'password123',
-//       accountNumber: BigInt(1234567890),
-//     };
+    await expect(createUserUseCase.execute(input)).rejects.toThrow(
+      AccountAlreadyExistsError,
+    );
 
-//     userRepository.findByEmail.mockResolvedValue(null);
-//     userRepository.existsAccountNumber.mockResolvedValue(true);
-
-//     await expect(createUserUseCase.execute(input)).rejects.toThrow(
-//       AccountAlreadyExistsError,
-//     );
-
-//     expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
-//     expect(userRepository.existsAccountNumber).toHaveBeenCalledWith(
-//       input.accountNumber,
-//     );
-//     expect(userRepository.create).not.toHaveBeenCalled();
-//   });
-// });
+    expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    expect(accountRepository.existsAccountNumber).toHaveBeenCalledWith(
+      input.accountNumber,
+    );
+    expect(userRepository.create).not.toHaveBeenCalled();
+  });
+});
