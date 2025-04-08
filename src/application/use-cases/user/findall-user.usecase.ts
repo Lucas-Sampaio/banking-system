@@ -12,10 +12,10 @@ export class FindAllUserUseCase {
   async execute(): Promise<UserOutputDto[]> {
     const users = await this.userRepository.findAll();
     return users.map((user) => ({
-      id: user.getId(),
-      name: user.getName(),
-      email: user.getEmail(),
-      accountNumber: user.getAccountNumber(),
+      id: user.Id,
+      name: user.Name,
+      email: user.Email,
+      accountNumber: user.AccountNumber,
     }));
   }
 }

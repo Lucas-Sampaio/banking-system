@@ -40,14 +40,24 @@ describe('MakeTransferUserUseCase', () => {
     const date = new Date();
     const amount = 100;
     const mockTransaction: Transaction = {
-      id: 'tx-id',
-      sourceAccountId: 'source-id',
-      destinationAccountId: 'dest-id',
-      amount: amount,
-      reversalTargetId: null,
-      getId: jest.fn().mockReturnValue('tx-id'),
-      getAmount: jest.fn().mockReturnValue(amount),
-      getCreatedAt: jest.fn().mockReturnValue(date),
+      get Id() {
+        return 'tx-id';
+      },
+      get SourceAccountId() {
+        return 'source-id';
+      },
+      get DestinationAccountId() {
+        return 'dest-id';
+      },
+      get Amount() {
+        return amount;
+      },
+      get ReversalTargetId() {
+        return null;
+      },
+      get CreatedAt() {
+        return date;
+      },
     } as unknown as Transaction;
 
     accountService.MakeTransfer.mockResolvedValue(mockTransaction);

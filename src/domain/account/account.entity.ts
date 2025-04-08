@@ -2,30 +2,31 @@ import { InsufficientFunds } from '../exceptions/account.errors';
 
 export class Account {
   constructor(
-    private id: string,
-    private number: number,
-    private userId: string,
+    private readonly _id: string,
+    private _number: number,
+    private _userId: string,
   ) {
     this.balance = 0;
   }
 
   private balance: number;
 
-  public getId(): string {
-    return this.id;
+  public get Id(): string {
+    return this._id;
   }
 
-  public getNumber(): number {
-    return this.number;
+  public get Number(): number {
+    return this._number;
   }
 
-  public getUserId(): string {
-    return this.userId;
+  public get UserId(): string {
+    return this._userId;
   }
 
-  public getBalance(): number {
+  public get Balance(): number {
     return this.balance;
   }
+
   public setBalance(balance: number): void {
     this.balance = balance;
   }

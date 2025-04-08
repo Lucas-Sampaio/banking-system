@@ -20,10 +20,10 @@ export class UserMapper {
     user: User,
   ): Omit<PrismaUser, 'createdAt' | 'updatedAt'> {
     return {
-      id: user.getId(),
-      name: user.getName(),
-      email: user.getEmail(),
-      password: user.getPassword(),
+      id: user.Id,
+      name: user.Name,
+      email: user.Email,
+      password: user.Password,
     };
   }
 }

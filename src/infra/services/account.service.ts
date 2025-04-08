@@ -35,7 +35,7 @@ export class AccountService implements IAccountService {
         destinationAccountNumber,
       ]);
       const sourceAccount = accounts.find(
-        (account) => account.getNumber() === sourceAccountNumber,
+        (account) => account.Number === sourceAccountNumber,
       );
 
       if (!sourceAccount) {
@@ -43,7 +43,7 @@ export class AccountService implements IAccountService {
       }
 
       const destinationAccount = accounts.find(
-        (account) => account.getNumber() === destinationAccountNumber,
+        (account) => account.Number === destinationAccountNumber,
       );
 
       if (!destinationAccount) {
@@ -61,8 +61,8 @@ export class AccountService implements IAccountService {
       }
       const transaction = new Transaction(
         transactionId,
-        sourceAccount.getId(),
-        destinationAccount.getId(),
+        sourceAccount.Id,
+        destinationAccount.Id,
         amount,
         reversalTargetId,
       );
@@ -70,13 +70,13 @@ export class AccountService implements IAccountService {
       const result = await transactionRepository.create(transaction);
 
       await accountRepository.updateBalance(
-        sourceAccount.getId(),
-        sourceAccount.getBalance(),
+        sourceAccount.Id,
+        sourceAccount.Balance,
       );
 
       await accountRepository.updateBalance(
-        destinationAccount.getId(),
-        destinationAccount.getBalance(),
+        destinationAccount.Id,
+        destinationAccount.Balance,
       );
       return result;
     });
@@ -93,7 +93,7 @@ export class AccountService implements IAccountService {
         sourceAccountNumber,
       ]);
       const sourceAccount = accounts.find(
-        (account) => account.getNumber() === sourceAccountNumber,
+        (account) => account.Number === sourceAccountNumber,
       );
 
       if (!sourceAccount) {
@@ -106,7 +106,7 @@ export class AccountService implements IAccountService {
 
       const transaction = new Transaction(
         transactionId,
-        sourceAccount.getId(),
+        sourceAccount.Id,
         null,
         amount,
         null,
@@ -115,8 +115,8 @@ export class AccountService implements IAccountService {
       const result = await transactionRepository.create(transaction);
 
       await accountRepository.updateBalance(
-        sourceAccount.getId(),
-        sourceAccount.getBalance(),
+        sourceAccount.Id,
+        sourceAccount.Balance,
       );
       return result;
     });

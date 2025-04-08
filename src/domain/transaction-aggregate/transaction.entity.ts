@@ -1,37 +1,37 @@
 export class Transaction {
   constructor(
-    private id: string,
-    private sourceAccountId: string,
-    private destinationAccountId: string | null,
-    private amount: number,
-    private reversalTargetId: string | null,
+    private readonly _id: string,
+    private readonly _sourceAccountId: string,
+    private readonly _destinationAccountId: string | null,
+    private readonly _amount: number,
+    private readonly _reversalTargetId: string | null,
   ) {}
 
-  private CreatedAt: Date;
+  private _createdAt: Date;
 
-  public getCreatedAt(): Date {
-    return this.CreatedAt;
+  public get CreatedAt(): Date {
+    return this._createdAt;
   }
-  public setCreatedAt(date: Date) {
-    this.CreatedAt = date;
+  public set CreatedAt(date: Date) {
+    this._createdAt = date;
   }
-  public getId(): string {
-    return this.id;
-  }
-
-  public getSourceAccountId(): string {
-    return this.sourceAccountId;
+  public get Id(): string {
+    return this._id;
   }
 
-  public getDestinationAccountId(): string | null {
-    return this.destinationAccountId;
+  public get SourceAccountId(): string {
+    return this._sourceAccountId;
   }
 
-  public getAmount(): number {
-    return this.amount;
+  public get DestinationAccountId(): string | null {
+    return this._destinationAccountId;
   }
 
-  public getReversalTargetId(): string | null {
-    return this.reversalTargetId;
+  public get Amount(): number {
+    return this._amount;
+  }
+
+  public get ReversalTargetId(): string | null {
+    return this._reversalTargetId;
   }
 }

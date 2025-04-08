@@ -17,9 +17,9 @@ export class RefundTransferUserUseCase {
       throw new TransactionNotFound();
     }
     return {
-      id: result.getId(),
-      amount: result.getAmount(),
-      createdAt: result.getCreatedAt(),
+      id: result.Id,
+      amount: result.Amount,
+      createdAt: result.CreatedAt,
     };
   }
 }

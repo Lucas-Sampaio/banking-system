@@ -29,9 +29,9 @@ export class PrismaUserRepository implements IUsersRepository {
       data: {
         account: {
           create: {
-            id: account.getId(),
-            number: account.getNumber(),
-            balance: account.getBalance(),
+            id: account.Id,
+            number: account.Number,
+            balance: account.Balance,
           },
         },
       },
@@ -100,7 +100,7 @@ export class PrismaUserRepository implements IUsersRepository {
   }
 
   async create(user: User): Promise<void> {
-    const account = user.getAccount();
+    const account = user.Account;
     if (!account) {
       await this.prisma.user.create({
         data: UserMapper.toPersistence(user),
@@ -108,14 +108,14 @@ export class PrismaUserRepository implements IUsersRepository {
     } else {
       await this.prisma.user.create({
         data: {
-          id: user.getId(),
-          name: user.getName(),
-          email: user.getEmail(),
-          password: user.getPassword(),
+          id: user.Id,
+          name: user.Name,
+          email: user.Email,
+          password: user.Password,
           account: {
             create: {
-              id: account.getId(),
-              number: account.getNumber(),
+              id: account.Id,
+              number: account.Number,
             },
           },
         },

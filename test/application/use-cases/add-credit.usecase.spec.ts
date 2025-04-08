@@ -38,14 +38,24 @@ describe('AddCreditUserUseCase', () => {
     };
 
     const mockTransaction: Transaction = {
-      id: 'transaction-id',
-      sourceAccountId: 'source-account-id',
-      destinationAccountId: null,
-      amount: amount,
-      reversalTargetId: null,
-      getId: jest.fn().mockReturnValue('transaction-id'),
-      getAmount: jest.fn().mockReturnValue(amount),
-      getCreatedAt: jest.fn().mockReturnValue(date),
+      get Id() {
+        return 'transaction-id';
+      },
+      get SourceAccountId() {
+        return 'source-account-id';
+      },
+      get DestinationAccountId() {
+        return null;
+      },
+      get Amount() {
+        return amount;
+      },
+      get ReversalTargetId() {
+        return null;
+      },
+      get CreatedAt() {
+        return date;
+      },
     } as unknown as Transaction;
     accountService.AddCredit.mockResolvedValue(mockTransaction);
 

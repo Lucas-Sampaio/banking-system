@@ -54,10 +54,10 @@ export class CreateUserUseCase {
     await this.userRepository.create(user);
 
     return {
-      id: user.getId(),
-      name: user.getName(),
-      email: user.getEmail(),
-      accountNumber: user.getAccountNumber(),
+      id: user.Id,
+      name: user.Name,
+      email: user.Email,
+      accountNumber: user.AccountNumber,
     };
   }
 }

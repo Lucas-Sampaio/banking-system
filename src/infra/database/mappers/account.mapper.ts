@@ -14,10 +14,10 @@ export class AccountMapper {
     account: Account,
   ): Omit<PrismaAccount, 'createdAt' | 'updatedAt'> {
     return {
-      id: account.getId(),
-      number: account.getNumber(),
-      balance: account.getBalance(),
-      userId: account.getUserId(),
+      id: account.Id,
+      number: account.Number,
+      balance: account.Balance,
+      userId: account.UserId,
     };
   }
 }

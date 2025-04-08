@@ -16,11 +16,11 @@ export class PrismaTransactionRepository implements ITransactionRepository {
   async create(transaction: Transaction): Promise<Transaction> {
     const transactionOutput = await this.prisma.transaction.create({
       data: {
-        sourceAccountId: transaction.getSourceAccountId(),
-        destinationAccountId: transaction.getDestinationAccountId(),
-        amount: transaction.getAmount(),
-        id: transaction.getId(),
-        reversalTargetId: transaction.getReversalTargetId(),
+        sourceAccountId: transaction.SourceAccountId,
+        destinationAccountId: transaction.DestinationAccountId,
+        amount: transaction.Amount,
+        id: transaction.Id,
+        reversalTargetId: transaction.ReversalTargetId,
       },
     });
 

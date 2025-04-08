@@ -68,7 +68,7 @@ describe('AddUserAccountUseCase', () => {
       input.accountNumber,
     );
     expect(userRepository.addAccount).toHaveBeenCalledWith(
-      user.getId(),
+      user.Id,
       expect.any(Account),
     );
   });
@@ -102,8 +102,12 @@ describe('AddUserAccountUseCase', () => {
       email: 'test@example.com',
       password: 'hashed-password',
       accountNumber: null,
-      getId: jest.fn().mockReturnValue('user-id'),
-      getAccountNumber: jest.fn().mockReturnValue(154878),
+      get Id() {
+        return 'user-id';
+      },
+      get AccountNumber() {
+        return 154878;
+      },
     } as unknown as User;
 
     userRepository.findById.mockResolvedValue(user);

@@ -17,23 +17,23 @@ describe('User Entity', () => {
   });
 
   it('should return the correct user ID', () => {
-    expect(user.getId()).toBe('user-id');
+    expect(user.Id).toBe('user-id');
   });
 
   it('should return the correct user name', () => {
-    expect(user.getName()).toBe('John Doe');
+    expect(user.Name).toBe('John Doe');
   });
 
   it('should return the correct user email', () => {
-    expect(user.getEmail()).toBe('john.doe@example.com');
+    expect(user.Email).toBe('john.doe@example.com');
   });
 
   it('should return the correct user password', () => {
-    expect(user.getPassword()).toBe('hashed-password');
+    expect(user.Password).toBe('hashed-password');
   });
 
   it('should return the correct account number if account exists', () => {
-    expect(user.getAccountNumber()).toBe(123456);
+    expect(user.AccountNumber).toBe(123456);
   });
 
   it('should return undefined for account number if account does not exist', () => {
@@ -44,11 +44,11 @@ describe('User Entity', () => {
       'hashed-password',
       null,
     );
-    expect(userWithoutAccount.getAccountNumber()).toBeUndefined();
+    expect(userWithoutAccount.AccountNumber).toBeUndefined();
   });
 
   it('should return the correct account object if account exists', () => {
-    expect(user.getAccount()).toBe(account);
+    expect(user.Account).toBe(account);
   });
 
   it('should return null for account if account does not exist', () => {
@@ -59,6 +59,6 @@ describe('User Entity', () => {
       'hashed-password',
       null,
     );
-    expect(userWithoutAccount.getAccount()).toBeNull();
+    expect(userWithoutAccount.Account).toBeNull();
   });
 });

@@ -10,7 +10,7 @@ export class TransactionMapper {
       raw.amount,
       raw.reversalTargetId,
     );
-    transaction.setCreatedAt(raw.createdAt);
+    transaction.CreatedAt = raw.createdAt;
     return transaction;
   }
 }

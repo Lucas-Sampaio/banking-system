@@ -16,12 +16,12 @@ export class AuthService {
     password: string,
   ): Promise<UserPayload | null> {
     const user = await this.userRepository.findByEmail(email);
-    if (user && (await bcrypt.compare(password, user.getPassword()))) {
+    if (user && (await bcrypt.compare(password, user.Password))) {
       return {
-        id: user.getId(),
-        name: user.getName(),
-        email: user.getEmail(),
-        accountNumber: user.getAccountNumber()?.toString(),
+        id: user.Id,
+        name: user.Name,
+        email: user.Email,
+        accountNumber: user.AccountNumber?.toString(),
       };
     }
     return null;

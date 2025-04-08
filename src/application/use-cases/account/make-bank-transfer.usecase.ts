@@ -20,11 +20,11 @@ export class MakeTransferUserUseCase {
       null,
     );
     return {
-      transactionId: result.getId(),
+      transactionId: result.Id,
       sourceAccountNumber: input.sourceAccountNumber,
       destinationAccountNumber: input.destinationAccountNumber,
-      amount: result.getAmount(),
-      createdAt: result.getCreatedAt(),
+      amount: result.Amount,
+      createdAt: result.CreatedAt,
     };
   }
 }

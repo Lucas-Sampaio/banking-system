@@ -31,9 +31,15 @@ describe('RefundTransferUserUseCase', () => {
     const transactionId = 'transaction-id';
 
     const mockTransaction: Transaction = {
-      getId: jest.fn().mockReturnValue(transactionId),
-      getAmount: jest.fn().mockReturnValue(100),
-      getCreatedAt: jest.fn().mockReturnValue(new Date('2025-04-06T12:00:00Z')),
+      get Id() {
+        return transactionId;
+      },
+      get Amount() {
+        return 100;
+      },
+      get CreatedAt() {
+        return new Date('2025-04-06T12:00:00Z');
+      },
     } as unknown as Transaction;
 
     accountService.refundTransfer.mockResolvedValue(mockTransaction);

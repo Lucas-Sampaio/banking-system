@@ -26,7 +26,7 @@ export class AddUserAccountUseCase {
       throw new UserNotFound(input.id);
     }
 
-    if (user.getAccountNumber()) {
+    if (user.AccountNumber) {
       throw new UserAlreadyExistingAccountError();
     }
 
@@ -35,14 +35,14 @@ export class AddUserAccountUseCase {
         input.accountNumber,
       );
 
-      if (existingAccount && user.getAccountNumber() !== input.accountNumber) {
+      if (existingAccount && user.AccountNumber !== input.accountNumber) {
         throw new AccountAlreadyExistsError(input.accountNumber);
       }
     }
 
     const accountId = crypto.randomUUID();
-    const account = new Account(accountId, input.accountNumber, user.getId());
-    await this.userRepository.addAccount(user.getId(), account);
+    const account = new Account(accountId, input.accountNumber, user.Id);
+    await this.userRepository.addAccount(user.Id, account);
     return;
   }
 }

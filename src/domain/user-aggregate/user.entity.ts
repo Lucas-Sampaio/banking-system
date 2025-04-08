@@ -2,29 +2,29 @@ import { Account } from '../account/account.entity';
 
 export class User {
   constructor(
-    private id: string,
-    private name: string,
-    private email: string,
-    private password: string,
-    private account: Account | null,
+    private readonly _id: string,
+    private _name: string,
+    private _email: string,
+    private _password: string,
+    private _account: Account | null,
   ) {}
 
-  getId(): string {
-    return this.id;
+  get Id(): string {
+    return this._id;
   }
-  getName(): string {
-    return this.name;
+  get Name(): string {
+    return this._name;
   }
-  getEmail(): string {
-    return this.email;
+  get Email(): string {
+    return this._email;
   }
-  getPassword(): string {
-    return this.password;
+  get Password(): string {
+    return this._password;
   }
-  getAccountNumber(): number | undefined {
-    return this.account?.getNumber();
+  get AccountNumber(): number | undefined {
+    return this._account?.Number;
   }
-  getAccount(): Account | null {
-    return this.account;
+  get Account(): Account | null {
+    return this._account;
   }
 }

@@ -15,10 +15,10 @@ export class AddCreditUserUseCase {
       input.amount,
     );
     return {
-      transactionId: result.getId(),
+      transactionId: result.Id,
       sourceAccountNumber: input.sourceAccountNumber,
-      amount: result.getAmount(),
-      createdAt: result.getCreatedAt(),
+      amount: result.Amount,
+      createdAt: result.CreatedAt,
     };
   }
 }

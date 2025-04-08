@@ -28,16 +28,32 @@ describe('FindAllUserUseCase', () => {
     const accountNumber = 12345678;
     const mockUsers = [
       {
-        getId: jest.fn().mockReturnValue('user-id-1'),
-        getName: jest.fn().mockReturnValue('John Doe'),
-        getEmail: jest.fn().mockReturnValue('john.doe@example.com'),
-        getAccountNumber: jest.fn().mockReturnValue(accountNumber),
+        get Id() {
+          return 'user-id-1';
+        },
+        get Name() {
+          return 'John Doe';
+        },
+        get Email() {
+          return 'john.doe@example.com';
+        },
+        get AccountNumber() {
+          return accountNumber;
+        },
       },
       {
-        getId: jest.fn().mockReturnValue('user-id-2'),
-        getName: jest.fn().mockReturnValue('Jane Doe'),
-        getEmail: jest.fn().mockReturnValue('jane.doe@example.com'),
-        getAccountNumber: jest.fn().mockReturnValue(null),
+        get Id() {
+          return 'user-id-2';
+        },
+        get Name() {
+          return 'Jane Doe';
+        },
+        get Email() {
+          return 'jane.doe@example.com';
+        },
+        get AccountNumber() {
+          return null;
+        },
       },
     ];
 
