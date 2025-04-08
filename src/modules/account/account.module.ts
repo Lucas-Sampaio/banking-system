@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
 import { AccountController } from 'src/presentation/controllers/account.controller';
 import { MakeTransferUserUseCase } from 'src/application/use-cases/account/make-bank-transfer.usecase';
@@ -9,7 +9,7 @@ import { AddCreditUserUseCase } from 'src/application/use-cases/account/add-cred
 import { RefundTransferUserUseCase } from 'src/application/use-cases/account/refund-transfer.usercase';
 
 @Module({
-  imports: [AuthModule],
+  imports: [forwardRef(() => AuthModule)],
   controllers: [AccountController],
   providers: [
     MakeTransferUserUseCase,
